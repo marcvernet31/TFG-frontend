@@ -5,7 +5,9 @@ import ResponsiveAppBar from './components/ResponsiveAppBar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
@@ -18,7 +20,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 // https://devtrium.com/posts/async-functions-useeffect
 
-const CustomizedInputBase = () => {
+const CustomizedInputBase = ({setSearchBar}) => {
     return (
       <Paper
         component="form"
@@ -28,6 +30,7 @@ const CustomizedInputBase = () => {
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search Catalog"
           inputProps={{ 'aria-label': 'search google maps' }}
+          onChange={(event) => setSearchBar(event.target.value)}
         />
         <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
           <SearchIcon />
@@ -39,9 +42,7 @@ const CustomizedInputBase = () => {
 
   const MediaCard = ({title, category, date, description, origin, web_url, datasetId}) => {
   
-    const handleClick = () => {
-      console.log("clicked")
-    }
+
   
     return (
       <Card sx={{ maxWidth: 500 }}>
@@ -51,50 +52,88 @@ const CustomizedInputBase = () => {
           </Typography>
           <Chip label={origin} />
           <Typography variant="body2" color="text.secondary">
-            {description}
+            {description.substr(0, Math.min(100, description.length)) } ...
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={(() => handleClick())}> Visita </Button>
+          <Button size="small" href={`/catalog/${datasetId}`}> 
+            Visita 
+          </Button>
         </CardActions>
       </Card>
     );
   }
 
-const CatalogDispaly = ({catalog}) => {
+
+//  dataset.title.toLowerCase().includes(searchBar)
+
+const CatalogDispaly = ({catalog, searchBar}) => {
+
+  const filterLogic = (title, description, searchBar) => {
+    return(title.toLowerCase().includes(searchBar)
+    || description.toLowerCase().includes(searchBar)
+    )
+  }
+
   return(
     <div>
-    {catalog.map((dataset, index) =>                                         
-      <MediaCard key={index} 
-        title={dataset.title}
-        category={dataset.category}
-        date={dataset.date}
-        description={dataset.description}
-        origin={dataset.origin}
-        web_url={dataset.web_url}
-        datasetId={index}
-      />
+    {catalog.map((dataset, index) =>    
+    <div key={index}>  
+
+        {filterLogic(dataset.title, dataset.description, searchBar) ? 
+        (
+          <Box key={index} sx={{ m:2, border: '1px dashed grey' }} >
+            <MediaCard  
+              title={dataset.title}
+              category={dataset.category}
+              date={dataset.date}
+              description={dataset.description}
+              origin={dataset.origin}
+              web_url={dataset.web_url}
+              datasetId={index}
+            />
+          </Box>
+        ) 
+        : (<></>)
+        }
+      </div>                                   
       )}
     </div>
   )
 }
 
+const Selection = () => {
+  return(
+    <div>
+      <Typography variant="h5" >
+        Dataset Origin
+      </Typography>
+      <FormGroup>
+        <FormControlLabel control={<Checkbox defaultChecked />} label="Barcelona" />
+        <FormControlLabel  control={<Checkbox defaultChecked />} label="Hospitalet" />
+      </FormGroup>
+    </div>
+
+  )
+}
 
 const DatasetSearch = () => {
 
   const [catalog, setCatalog] = useState([])  
+  const [loading, setLoading] = useState(false)
+  const [searchBar, setSearchBar] = useState("")
   
   const fetchData = useCallback(async () => {
+    setLoading(true)
     const response = await fetch("http://localhost:8000/catalog")
     const retrievedCatalog = await response.json()
     setCatalog(retrievedCatalog.message);
+    setLoading(false)
   }, [])
   
   useEffect(() => {
     fetchData()
-      .catch(console.error);;
-
-    console.log(catalog)
+      .catch(console.error);
   }, [])
 
     return(
@@ -105,10 +144,19 @@ const DatasetSearch = () => {
                     <Typography variant="h5" align="center">
                         CATALEG
                     </Typography>
-                    <Box display="flex" justifyContent="center">
-                        <CustomizedInputBase/>
+                    <Box display="flex" justifyContent="center" sx={{ p: 2, border: '1px dashed grey' }}>
+                        <CustomizedInputBase setSearchBar={setSearchBar}/>
                     </Box>
-                    <CatalogDispaly catalog={catalog}/>
+                    <Selection/>
+                    {loading ? 
+                      (<p>loading</p>) 
+                      : 
+                      (
+                        <Box display="flex" justifyContent="center" sx={{ p: 2, border: '1px dashed grey' }}>
+                          <CatalogDispaly catalog={catalog} searchBar={searchBar}/>
+                        </Box>
+                    )}
+
                 </main>
             </Container>
         </>

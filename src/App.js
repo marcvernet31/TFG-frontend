@@ -13,6 +13,7 @@ import {
 import Catalog from './Catalog';
 import MainPage from './MainPage';
 import NotFoundPage from './404'
+import DatasetPage from './DatasetPage'
 
 import {useEffect, useState} from "react";
 
@@ -43,6 +44,7 @@ function App() {
           <Route  path="/" element={<MainPage/>} />
           <Route  path="/catalog" element={<Catalog/>} />
           <Route  path="/404" element={<NotFoundPage/>} />
+          <Route path="/catalog/:datasetId" element={<DatasetPage/>} />
       </Routes>
   </Router>
   </ThemeProvider>

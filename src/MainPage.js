@@ -3,15 +3,18 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
-import { Link } from "react-router-dom";
+import List from '@mui/material/List';
 import Button from '@mui/material/Button';
 import CardMedia from '@mui/material/CardMedia';
 import Container from '@mui/material/Container';
+import SendIcon from '@mui/icons-material/Send';
 import Typography from '@mui/material/Typography';
-import CssBaseline from '@mui/material/CssBaseline';
 import CardContent from '@mui/material/CardContent';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListSubheader from '@mui/material/ListSubheader';
+import ListItemButton from '@mui/material/ListItemButton';
 import CardActionArea from '@mui/material/CardActionArea';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import Footer from './components/Footer';
 import MainFeaturedPost from './components/MainFeaturedPost';
@@ -184,11 +187,27 @@ const MainPage = () => {
               Datasets per categoria
             </Typography>
           </Container>
-          <Grid container spacing={4}>
+          <List
+            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+            subheader={
+              <ListSubheader component="div" id="nested-list-subheader">
+                Categories
+              </ListSubheader>
+            }
+          >
             {categoryDatasets.map((category) => (
-              <CategoryCard key={category.name} category={category} />
+                    <ListItemButton>
+                    <ListItemIcon>
+                      <SendIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={category.name} />
+                  </ListItemButton>
+            
             ))}
-          </Grid>
+          </List>
+
         </main>
       </Container>
       <Footer
