@@ -10,12 +10,12 @@ import {
   Navigate
 } from "react-router-dom";
 
+
 import Catalog from './Catalog';
 import MainPage from './MainPage';
 import NotFoundPage from './404'
 import DatasetPage from './DatasetPage'
 
-import {useEffect, useState} from "react";
 
 
 
@@ -42,7 +42,7 @@ function App() {
     <Router>
       <Routes>
           <Route  path="/" element={<MainPage/>} />
-          <Route  path="/catalog" element={<Catalog/>} />
+          <Route  path="/catalog" element={<Catalog />} />
           <Route  path="/404" element={<NotFoundPage/>} />
           <Route path="/catalog/:datasetId" element={<DatasetPage/>} />
       </Routes>

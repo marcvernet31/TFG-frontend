@@ -40,9 +40,7 @@ const CustomizedInputBase = ({setSearchBar}) => {
   }
 
 
-  const MediaCard = ({title, category, date, description, origin, web_url, datasetId}) => {
-  
-
+const MediaCard = ({title, category, date, description, origin, web_url, datasetId}) => {
   
     return (
       <Card sx={{ maxWidth: 500 }}>
@@ -122,6 +120,7 @@ const DatasetSearch = () => {
   const [catalog, setCatalog] = useState([])  
   const [loading, setLoading] = useState(false)
   const [searchBar, setSearchBar] = useState("")
+  
   
   const fetchData = useCallback(async () => {
     setLoading(true)
