@@ -1,24 +1,31 @@
 import {useEffect, useState, useCallback} from "react";
+import * as React from 'react';
 
-import Container from '@mui/material/Container';
-import ResponsiveAppBar from './components/ResponsiveAppBar'; 
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
+import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputBase from '@mui/material/InputBase';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Pagination from '@mui/material/Pagination';
+import InputLabel from '@mui/material/InputLabel';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-
-import InputBase from '@mui/material/InputBase';
-import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
+import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import ResponsiveAppBar from './components/ResponsiveAppBar'; 
 
-// https://devtrium.com/posts/async-functions-useeffect
+
+
+const categories = ["Sector públic", "Salut", "Urbanisme i infraestructures", "Medi ambient", "Cultura i oci", "Transport", "Economia", "Hisenda", "Administració", "Territori", "Altres"]
+const origins = ["Barcelona", "L'Hospitalet"]
+
 
 const CustomizedInputBase = ({setSearchBar}) => {
     return (
@@ -65,51 +72,134 @@ const MediaCard = ({title, category, date, description, origin, web_url, dataset
 
 //  dataset.title.toLowerCase().includes(searchBar)
 
-const CatalogDispaly = ({catalog, searchBar}) => {
+const CatalogDispaly = ({catalog, searchBar, selectedOrigin}) => {
 
-  const filterLogic = (title, description, searchBar) => {
-    return(title.toLowerCase().includes(searchBar)
-    || description.toLowerCase().includes(searchBar)
-    )
+  const [showRange, setShowRange] = useState([0, 10]) 
+
+  const handlePaginationChange = (page) => {
+    setShowRange([page*10, page*10+10])
+  }
+
+  const filterLogic = (title, description, origin) => {
+    const searchBarCondition =  (title.toLowerCase().includes(searchBar)
+      || description.toLowerCase().includes(searchBar))
+
+    const originCondition =   (selectedOrigin.includes('Barcelona') && origin == 'barcelona')
+    || (selectedOrigin.includes('L\'Hospitalet') && origin == 'hospitalet')
+
+    if(selectedOrigin.length == 0){
+      return searchBarCondition
+    } 
+    else{
+      return(
+        searchBarCondition && originCondition
+      )
+    }
+  }
+
+  const filteredLength = () => {
+    const len = Math.floor(catalog.filter(function(dataset){
+      return filterLogic(dataset.title, dataset.description, dataset.origin)
+    }).length / 10)
+    return len
   }
 
   return(
     <div>
-    {catalog.map((dataset, index) =>    
-    <div key={index}>  
-
-        {filterLogic(dataset.title, dataset.description, searchBar) ? 
-        (
-          <Box key={index} sx={{ m:2, border: '1px dashed grey' }} >
-            <MediaCard  
-              title={dataset.title}
-              category={dataset.category}
-              date={dataset.date}
-              description={dataset.description}
-              origin={dataset.origin}
-              web_url={dataset.web_url}
-              datasetId={index}
-            />
-          </Box>
-        ) 
-        : (<></>)
-        }
-      </div>                                   
+      {catalog.filter(function(dataset){
+        return filterLogic(dataset.title, dataset.description, dataset.origin)
+      })
+        .slice(showRange[0], showRange[1]).map((dataset, index) =>    
+          <div key={index}>  
+            <Box key={index} sx={{ m:2, border: '1px dashed grey' }} >
+              <MediaCard  
+                title={dataset.title}
+                category={dataset.category}
+                date={dataset.date}
+                description={dataset.description}
+                origin={dataset.origin}
+                web_url={dataset.web_url}
+                datasetId={index}
+              />
+            </Box>
+          </div>                                   
       )}
+      <Box sx={{ m:2, border: '1px dashed grey' }}     justifyContent="center" alignItems="center">
+        <Pagination 
+          count={filteredLength()} 
+          color="primary" 
+          onClick={event => handlePaginationChange(event.target.textContent)}
+        />
+      </Box>
+
     </div>
   )
 }
 
-const Selection = () => {
+const MultipleSelect = ({names, selectedValue, setSelectedValue, inputLabel}) => {
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectedValue(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+  return (
+    <div>
+      <FormControl sx={{ m: 1, width: 300 }}>
+        <InputLabel id="demo-multiple-name-label"> {inputLabel} </InputLabel>
+        <Select
+          labelId="demo-multiple-name-label"
+          id="demo-multiple-name"
+          multiple
+          value={selectedValue}
+          onChange={handleChange}
+          input={<OutlinedInput label="Name" />}
+        >
+          {names.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </div>
+  );
+}
+
+const Selection = ({selectedOrigin, setSelectedOrigin, selectedCategories, setSelectedCategories}) => {
+
   return(
     <div>
       <Typography variant="h5" >
         Dataset Origin
       </Typography>
-      <FormGroup>
-        <FormControlLabel control={<Checkbox defaultChecked />} label="Barcelona" />
-        <FormControlLabel  control={<Checkbox defaultChecked />} label="Hospitalet" />
-      </FormGroup>
+      <MultipleSelect 
+        names={origins}
+        selectedValue={selectedOrigin} 
+        setSelectedValue={setSelectedOrigin}
+        inputLabel='Font'
+      />
+      <Typography variant="h5" >
+        Categoria
+      </Typography>
+      <MultipleSelect 
+        names={categories} 
+        selectedValue={selectedCategories} 
+        setSelectedValue={setSelectedCategories}
+        inputLabel='Categoria'
+
+      />
+      {selectedOrigin.map((element, index) => (<p>{element}</p>))}
+      {selectedCategories.map((element, index) => (<p>{element}</p>))}
+
     </div>
 
   )
@@ -120,7 +210,9 @@ const DatasetSearch = () => {
   const [catalog, setCatalog] = useState([])  
   const [loading, setLoading] = useState(false)
   const [searchBar, setSearchBar] = useState("")
-  
+  const [selectedOrigin, setSelectedOrigin] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
   
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -146,13 +238,18 @@ const DatasetSearch = () => {
                     <Box display="flex" justifyContent="center" sx={{ p: 2, border: '1px dashed grey' }}>
                         <CustomizedInputBase setSearchBar={setSearchBar}/>
                     </Box>
-                    <Selection/>
+                    <Selection 
+                      selectedOrigin={selectedOrigin}
+                      setSelectedOrigin={setSelectedOrigin}
+                      selectedCategories={selectedCategories}
+                      setSelectedCategories={setSelectedCategories}
+                    />
                     {loading ? 
                       (<p>loading</p>) 
                       : 
                       (
                         <Box display="flex" justifyContent="center" sx={{ p: 2, border: '1px dashed grey' }}>
-                          <CatalogDispaly catalog={catalog} searchBar={searchBar}/>
+                          <CatalogDispaly catalog={catalog} searchBar={searchBar} selectedOrigin={selectedOrigin}/>
                         </Box>
                     )}
 

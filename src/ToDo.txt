@@ -1,0 +1,16 @@
+
+IMPORTANT
+ -- Join interafce
+ -- join results on individual datasets page
+ -- filter by category
+ -- filter by publish date
+ -- admin interface, hability to add new data
+
+DETAILS
+    -- front page header
+    -- logo
+
+NOT IMPORTANT
+    -- user profiles
+    -- hability to like datasets
+    -- coment on datasets

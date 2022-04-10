@@ -35,6 +35,7 @@ const mainFeaturedPost = {
 const originDatasets = [
   {
     title: 'OpenData Barcelona',
+    sourceId: 'barcelona',
     amount: '558',
     description:
       "Datasets de l'ajuntament de Barcelona",
@@ -43,6 +44,7 @@ const originDatasets = [
   },
   {
     title: "Open Data L'Hospitalet",
+    sourceId: 'hospitalet',
     amount: '98',
     description:
       "Datasets de l'ajuntament de L'Hospitalet",
@@ -93,7 +95,6 @@ function OriginCard({post}) {
 
   return (
     <Grid item xs={12} md={6}>
-      <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography component="h2" variant="h5">
@@ -105,7 +106,9 @@ function OriginCard({post}) {
             <Typography variant="subtitle1" paragraph>
               {post.description}
             </Typography>
-            <Button variant="contained"> Explora </Button>
+            <Button variant="contained" href={`/fonts/${post.sourceId}`}> 
+              Explora 
+            </Button>
           </CardContent>
           <CardMedia
             component="img"
@@ -114,7 +117,6 @@ function OriginCard({post}) {
             alt={post.imageLabel}
           />
         </Card>
-      </CardActionArea>
     </Grid>
   );
 }

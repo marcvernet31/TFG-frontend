@@ -1,36 +1,36 @@
 import { useParams } from "react-router-dom";
 import {useEffect, useState, useCallback} from "react";
-import Container from '@mui/material/Container';
-import PropTypes from 'prop-types';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import Link from '@mui/material/Link';
+
 import Box from '@mui/material/Box';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from '@mui/material/ListSubheader';
-import ListItemButton from '@mui/material/ListItemButton';
-import JoinInnerIcon from '@mui/icons-material/JoinInner';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import ListItem from '@mui/material/ListItem';
+import JoinLeftIcon from '@mui/icons-material/JoinLeft';
+import List from '@mui/material/List';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemButton from '@mui/material/ListItemButton';
+import JoinInnerIcon from '@mui/icons-material/JoinInner';
 
 import ResponsiveAppBar from './components/ResponsiveAppBar'; 
 
-const recomendedJoins = [
-    {title: "Dataset 1", quality: 0.3},
-    {title: "Dataset 2", quality: 0.27},
-    {title: "Dataset 3", quality: 0.14},
-    {title: "Dataset 4", quality: 0.11},
+/*
+Page to show the information about an individual dataset
+    -- Dataset information (title, description, ...)
+    -- Recomended Joins
+    -- Similar datasets based on description
+*/
 
-]
 
+// Information card for main dataset
 const DatasetInformation = ({dataset, image}) => {
     return(
         <Paper
@@ -44,7 +44,6 @@ const DatasetInformation = ({dataset, image}) => {
           backgroundPosition: 'center',
         }}
       >
-
         <Box
           sx={{
             position: 'absolute',
@@ -99,6 +98,8 @@ const DatasetInformation = ({dataset, image}) => {
     )
 }
 
+
+// Structure for recomended datasets
 const MediaCard = ({title, category, date, description, origin, web_url, datasetId}) => {
   
     return (
@@ -124,20 +125,18 @@ const MediaCard = ({title, category, date, description, origin, web_url, dataset
 const DatasetPage = () => {
 
     const { datasetId } = useParams();
-    const [loading, setLoading] = useState(false)
-    const [dataset, setDataset] = useState("")
-    const [similar, setSimilar] = useState([])
-    const [catalog, setCatalog] = useState([])  
-    const [dataIsReturned, setDataIsReturned] = useState(false)
+    const [dataset, setDataset] = useState("")                  // information about current dataset
+    const [similar, setSimilar] = useState([])                  // list of similar datasets fro recomendation
+    const [catalog, setCatalog] = useState([])                  // full catalog to calculate similarity 
+    const [dataIsReturned, setDataIsReturned] = useState(false) // bool to check if rendering can start
+    const [clickedColumn, setClickedColumn] = useState(-1)      // column selected to showcase similars
 
 
     const fetchData = useCallback(async () => {
-        setLoading(true)
         const response = await fetch(`http://localhost:8000/item/${datasetId}`)
         const retrievedDataset = await response.json()
         setDataset(retrievedDataset.message);
         console.log(retrievedDataset.message)
-        setLoading(false)
         }, [])
 
     const fetchSimilar = useCallback(async() => {
@@ -157,14 +156,10 @@ const DatasetPage = () => {
     useEffect(() => {
         fetchData()
             .catch(console.error);
-        fetchCatalog()
-            .catch(console.error);
         fetchSimilar()
             .catch(console.error);
-
-
-        
-        
+        fetchCatalog()
+            .catch(console.error);
     }, [])
 
     return(
@@ -177,23 +172,52 @@ const DatasetPage = () => {
                         <Typography variant="h5" color="inherit" paragraph>
                             Joins recomenades
                         </Typography>
-                        {recomendedJoins.map((join, index) => (
-                            <ListItemButton key={index}>
-                                <ListItemIcon>
-                                    <JoinInnerIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={join.title} secondary={join.quality}/>
-                            </ListItemButton>
-                        ))}
-                        <Button variant="contained" > Calcula una join </Button>
+                        {dataIsReturned ? (
+                            <div>
+                                {dataset.columns.length == 0 ? 
+                                (<p> Les columnes d'aquest dataset no poden ser explorades</p>) 
+                                : 
+                                (<p>Selecciona una columna per trobar columnes similars en altres datasets</p>)}
+
+                                {dataset.columns.map((column, index) => (
+                                    <ListItemButton key={index} onClick={() => setClickedColumn(index)}>
+                                        <ListItemIcon>
+                                                <JoinInnerIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary={column.name} secondary={column.type}/>
+                                    </ListItemButton>
+                                ))}
+                                {clickedColumn != -1 ? (
+                                    <div>
+                                        <h4> {dataset.columns[clickedColumn].name} </h4>
+                                        <List component="nav" aria-label="mailbox folders">
+                                            {dataset.columns[clickedColumn].similar.map((similarDataset, index) => (
+                                                <ListItemButton key={index}>
+                                                    <ListItemIcon>
+                                                        <JoinLeftIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary={`${similarDataset.datasetId} - ${similarDataset.name}`} 
+                                                        secondary={`Value: ${similarDataset.value}`}
+                                                    />
+                                                </ListItemButton>
+
+                                            ))}
+                                        </List>
+
+                                    </div>
+                                ) : (<></>)}
+                            </div>
+                        ) : (<p>loading</p>)}
                     </Box>
                     <Box sx={{ p: 2, border: '1px dashed grey' }}>
                         <Typography variant="h5" color="inherit" paragraph>
                             Datasets similars
                         </Typography>
+                        <p> Datasets amb una descripció similar</p>
                         {dataIsReturned ? (
                             <div>
                                 {similar.slice(1, 4).map((similarDatasetId, index) => (
+
                                     <div key={index}>
                                         <Box sx={{ p: 2, border: '1px dashed grey' }}>
                                             <MediaCard 
@@ -207,6 +231,7 @@ const DatasetPage = () => {
                                             />
                                         </Box>
                                     </div>
+
                                 ))}
                             </div>
                         ) : (<p>loading</p>)}
@@ -217,17 +242,5 @@ const DatasetPage = () => {
     )
 }
 
-/*
-                          <MediaCard 
-                                title={similarDataset.title} 
-                                category={similarDataset.category} 
-                                date={similarDataset.date} 
-                                description={similarDataset.description} 
-                                origin={similarDataset.origin} 
-                                web_url={similarDataset.web_url} 
-                                datasetId={index}
-                            />
-
-*/
 
 export default DatasetPage

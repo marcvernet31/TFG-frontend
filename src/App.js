@@ -15,7 +15,12 @@ import Catalog from './Catalog';
 import MainPage from './MainPage';
 import NotFoundPage from './404'
 import DatasetPage from './DatasetPage'
-
+import JoinPage from './JoinPage'
+import About from './About'
+import LogIn from './LogIn'
+import SignUp from './SignUp'
+import DataSources from './DataSources'
+import Contribute from './Contribute'
 
 
 
@@ -43,6 +48,11 @@ function App() {
       <Routes>
           <Route  path="/" element={<MainPage/>} />
           <Route  path="/catalog" element={<Catalog />} />
+          <Route  path="/fonts/:sourceId" element={<DataSources />} />
+          <Route  path="/about" element={<About />} />
+          <Route  path="/login" element={<LogIn />} />
+          <Route  path="/signup" element={<SignUp />} />
+          <Route  path="/contribueix" element={<Contribute />} />
           <Route  path="/404" element={<NotFoundPage/>} />
           <Route path="/catalog/:datasetId" element={<DatasetPage/>} />
       </Routes>
