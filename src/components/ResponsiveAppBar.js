@@ -5,6 +5,13 @@ import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import CssBaseline from '@mui/material/CssBaseline';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import Toolbar from '@mui/material/Toolbar';
 import MenuItem from '@mui/material/MenuItem';
@@ -26,6 +33,7 @@ const settings = [{name:'Perfil', link:'/login'},
                   {name:'SignUp', link:'/signup'}, 
                   {name:'Logout', link:'/login'}
                 ];
+
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -55,7 +63,7 @@ const ResponsiveAppBar = () => {
             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
             href='/'
           >
-            <img src="logo.jpg" alt="logo" width="50" height="50"></img>
+            <img src="logo3.png" alt="logo" width="50" height="50"></img>
           </Button>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -90,7 +98,9 @@ const ResponsiveAppBar = () => {
               {pages.map((page) => (
                 <MenuItem key={page.name}  onClick={handleCloseNavMenu}>
                   <Button href={page.link}>
-                  <Typography textAlign="center">{page.name}</Typography>
+                  <Typography textAlign="center" fontStyle='bold' gutterBottom variant="h8" component="h5">
+                    {page.name}
+                  </Typography>
                   </Button>
                 </MenuItem>
               ))}
@@ -107,7 +117,9 @@ const ResponsiveAppBar = () => {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page.name}
+                                  <Typography textAlign="center" fontStyle='bold' gutterBottom variant="h8" component="h5">
+                    {page.name}
+                  </Typography>
               </Button>
             ))}
           </Box>
@@ -137,7 +149,9 @@ const ResponsiveAppBar = () => {
               {settings.map((setting) => (
                 <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
                   <Button href={setting.link}>
-                    <Typography textAlign="center">{setting.name}</Typography>
+                    <Typography textAlign="center" gutterBottom variant="h8" component="h5">
+                      {setting.name}
+                    </Typography>
                   </Button>
                 </MenuItem>
               ))}

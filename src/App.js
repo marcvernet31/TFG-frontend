@@ -27,13 +27,13 @@ import Contribute from './Contribute'
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#f59042',
+      main: '#a141e0',
     },
     secondary: {
       main: '#edf2ff',
     },
     background: {
-      default: "#e4f0e2"
+      default: "#f5e6ff"
     }
   },
 });

@@ -4,10 +4,13 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import { makeStyles } from "@material-ui/core/styles";
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
+
 import {
     BrowserRouter as Router,
     Route,
@@ -15,8 +18,19 @@ import {
     Redirect
   } from "react-router-dom";
 
-function MainFeaturedPost(props) {
-  const { post } = props;
+const useStyles = makeStyles((theme) => ({
+    myClassName: {
+      color: "#EFD26E",
+      position: "relative",
+      "&:hover": {
+        color: "green",
+        fontSize: 'large'
+      }
+    }
+  }));
+
+function MainFeaturedPost({post, mainPageIndex, setMainPageIndex, maxIndex}) {
+  const classes = useStyles();
 
   return (
     <Paper
@@ -59,10 +73,12 @@ function MainFeaturedPost(props) {
               {post.description}
             </Typography>
             <Stack direction="row" spacing={2}>
-                <ArrowCircleLeftIcon/>
-                <ArrowCircleRightIcon/>
+                  <ArrowCircleLeftIcon onClick={() => setMainPageIndex(Math.max(mainPageIndex - 1, 0))} className={classes.myClassName}/>
+
+                  <ArrowCircleRightIcon onClick={() => setMainPageIndex(Math.min(mainPageIndex + 1, maxIndex))} className={classes.myClassName}/>
             </Stack>
           </Box>
+          
         </Grid>
       </Grid>
     </Paper>

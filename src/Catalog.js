@@ -35,7 +35,7 @@ const CustomizedInputBase = ({setSearchBar}) => {
       >
         <InputBase
           sx={{ ml: 1, flex: 1 }}
-          placeholder="Search Catalog"
+          placeholder="Cerca al catàleg"
           inputProps={{ 'aria-label': 'search google maps' }}
           onChange={(event) => setSearchBar(event.target.value)}
         />
@@ -232,9 +232,15 @@ const DatasetSearch = () => {
             <ResponsiveAppBar/>
             <Container maxWidth={"lg"} sx={{ p: 2, border: '1px dashed grey' }}>
                 <main>
-                    <Typography variant="h5" align="center">
-                        CATALEG
-                    </Typography>
+                <Typography
+                            component="h1"
+                            variant="h2"
+                            align="center"
+                            color="text.primary"
+                            gutterBottom
+                        >
+                            Catàleg
+                        </Typography>
                     <Box display="flex" justifyContent="center" sx={{ p: 2, border: '1px dashed grey' }}>
                         <CustomizedInputBase setSearchBar={setSearchBar}/>
                     </Box>
