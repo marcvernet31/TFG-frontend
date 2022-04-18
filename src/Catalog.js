@@ -4,6 +4,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
@@ -52,13 +53,28 @@ const MediaCard = ({title, category, date, description, origin, web_url, dataset
     return (
       <Card sx={{ maxWidth: 500 }}>
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h6" component="h5">
             {title}
           </Typography>
-          <Chip label={origin} />
-          <Typography variant="body2" color="text.secondary">
-            {description.substr(0, Math.min(100, description.length)) } ...
-          </Typography>
+          <Stack direction="row" spacing={2} >
+            <Chip label={origin} />
+            <Chip label={category} />
+          </Stack>
+          <Container sx={{ p:2, border: '1px dashed grey'}}></Container>
+          {(description.length < 200) ? 
+            (
+              <Typography variant="p" component="p" paragraph color="text.secondary">
+                {description}
+              </Typography>
+            ) 
+            : 
+            (
+              <Typography variant="p" component="p" paragraph color="text.secondary">
+              {description.substr(0,200)}...
+              </Typography>
+            )
+          }
+
         </CardContent>
         <CardActions>
           <Button size="small" href={`/catalog/${datasetId}`}> 
@@ -119,7 +135,7 @@ const CatalogDispaly = ({catalog, searchBar, selectedOrigin}) => {
                 description={dataset.description}
                 origin={dataset.origin}
                 web_url={dataset.web_url}
-                datasetId={index}
+                datasetId={dataset.index}
               />
             </Box>
           </div>                                   
@@ -197,8 +213,6 @@ const Selection = ({selectedOrigin, setSelectedOrigin, selectedCategories, setSe
         inputLabel='Categoria'
 
       />
-      {selectedOrigin.map((element, index) => (<p>{element}</p>))}
-      {selectedCategories.map((element, index) => (<p>{element}</p>))}
 
     </div>
 
@@ -232,24 +246,29 @@ const DatasetSearch = () => {
             <ResponsiveAppBar/>
             <Container maxWidth={"lg"} sx={{ p: 2, border: '1px dashed grey' }}>
                 <main>
-                <Typography
-                            component="h1"
-                            variant="h2"
-                            align="center"
-                            color="text.primary"
-                            gutterBottom
-                        >
-                            Catàleg
-                        </Typography>
+                  <Typography
+                    component="h1"
+                    variant="h2"
+                    align="center"
+                    color="text.primary"
+                    gutterBottom
+                  >
+                    Catàleg
+                  </Typography>
+                    
                     <Box display="flex" justifyContent="center" sx={{ p: 2, border: '1px dashed grey' }}>
                         <CustomizedInputBase setSearchBar={setSearchBar}/>
                     </Box>
-                    <Selection 
-                      selectedOrigin={selectedOrigin}
-                      setSelectedOrigin={setSelectedOrigin}
-                      selectedCategories={selectedCategories}
-                      setSelectedCategories={setSelectedCategories}
-                    />
+
+                    <Card display="flex"  sx={{ p: 2, border: '1px dashed grey' }}>
+                      <Selection 
+                        selectedOrigin={selectedOrigin}
+                        setSelectedOrigin={setSelectedOrigin}
+                        selectedCategories={selectedCategories}
+                        setSelectedCategories={setSelectedCategories}
+                      />
+                    </Card>
+
                     {loading ? 
                       (<p>loading</p>) 
                       : 
@@ -258,7 +277,6 @@ const DatasetSearch = () => {
                           <CatalogDispaly catalog={catalog} searchBar={searchBar} selectedOrigin={selectedOrigin}/>
                         </Box>
                     )}
-
                 </main>
             </Container>
         </>

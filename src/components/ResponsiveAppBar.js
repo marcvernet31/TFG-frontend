@@ -22,7 +22,6 @@ import Typography from '@mui/material/Typography';
 
 const pages = [
   {name: 'Cataleg', link:'/catalog'}, 
-  {name: 'Fonts', link: '/fonts'}, 
   {name: 'Contribueix', link:'/contribueix'},
   {name: 'Sobre la web', link:'about'}
 ];

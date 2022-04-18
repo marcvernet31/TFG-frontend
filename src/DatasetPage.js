@@ -5,18 +5,16 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import ListItem from '@mui/material/ListItem';
-import JoinLeftIcon from '@mui/icons-material/JoinLeft';
 import List from '@mui/material/List';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import JoinLeftIcon from '@mui/icons-material/JoinLeft';
 import ListItemButton from '@mui/material/ListItemButton';
 import JoinInnerIcon from '@mui/icons-material/JoinInner';
 
@@ -33,68 +31,37 @@ Page to show the information about an individual dataset
 // Information card for main dataset
 const DatasetInformation = ({dataset, image}) => {
     return(
-        <Paper
-        sx={{
-          position: 'relative',
-          backgroundColor: 'grey.800',
-          color: '#fff',
-          mb: 4,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-        }}
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-            backgroundColor: 'rgba(192,192,192)',
-          }}
-        />
-        <Grid container>
-          <Grid item md={6}>
-            <Box
-              sx={{
-                position: 'relative',
-                p: { xs: 3, md: 6 },
-                pr: { md: 0 },
-              }}
-            >
-                <Stack direction="row"  justifyContent="space-between" spacing={5} >
-                    <Box sx={{ border: '1px dashed grey' }}>
-                        <Typography component="h1" variant="h3" color="inherit" gutterBottom>
-                            {dataset.title}
-                        </Typography>
-                        <Typography variant="h5" color="inherit" paragraph>
-                            {dataset.description}
-                        </Typography>
-                    </Box>
-                    <Box sx={{ border: '1px dashed grey' }}>
-                        <Stack direction="column"  justifyContent="space-between" spacing={5} >
-                            <Box sx={{ border: '1px dashed grey' }}>
-                                <h2>Categoria: {dataset.category}</h2>
-                            </Box>
-                            <Box sx={{ border: '1px dashed grey' }}>
-                                <h2>Data: {dataset.date}</h2>
-                            </Box>
+        <Grid item xs={12} md={6}>
+        <Card sx={{ display: 'flex' }} >
+          <CardContent sx={{ flex: 1 }}>
+            <Stack spacing={2}>
+                <Container sx={{p: 2, border: '1px dashed grey' }}>
+                    <Typography gutterBottom variant="h3" component="h5">
+                        {dataset.title}
+                    </Typography>
+                    <Typography variant="p" component="p" color="text.secondary">
+                        {dataset.description}
+                    </Typography>
+                    <Container sx={{p: 1, border: '1px dashed grey' }}>
+                        <Stack direction="row" spacing={2}>
+                            <Chip label="category?" />
+                            <Chip label="date?" />
+                            <Chip label="filetype?" />
                         </Stack>
-                    </Box>
-                    <Box sx={{ border: '1px dashed grey' }}>
-                        <Box sx={{ p:2, border: '1px dashed grey' }}>
-                            <Button href={dataset.download_url} variant="contained"> Descarrega </Button>
-                        </Box>
-                        <Box sx={{p:2,  border: '1px dashed grey' }}>
-                            <Button href={dataset.web_url} target='_blank' variant="contained"> Visita original </Button>
-                        </Box>
-                    </Box>
-                </Stack>
-            </Box>
-          </Grid>
-        </Grid>
-      </Paper>
+                    </Container>
+                </Container>
+
+                <Container sx={{p: 2, border: '1px dashed grey' }}>
+                    <Stack direction="row" spacing={2}>
+                        <Button variant="contained"> Descarrega </Button>
+                        <Button variant="contained"> Visita l'original </Button>
+                    </Stack>
+                </Container>
+            </Stack>
+          </CardContent>
+        </Card>
+    </Grid>     
+               
     )
 }
 
@@ -126,39 +93,19 @@ const DatasetPage = () => {
 
     const { datasetId } = useParams();
     const [dataset, setDataset] = useState("")                  // information about current dataset
-    const [similar, setSimilar] = useState([])                  // list of similar datasets fro recomendation
-    const [catalog, setCatalog] = useState([])                  // full catalog to calculate similarity 
     const [dataIsReturned, setDataIsReturned] = useState(false) // bool to check if rendering can start
     const [clickedColumn, setClickedColumn] = useState(-1)      // column selected to showcase similars
-
 
     const fetchData = useCallback(async () => {
         const response = await fetch(`http://localhost:8000/item/${datasetId}`)
         const retrievedDataset = await response.json()
         setDataset(retrievedDataset.message);
         console.log(retrievedDataset.message)
-        }, [])
-
-    const fetchSimilar = useCallback(async() => {
-        const response = await fetch(`http://localhost:8000/similar/${datasetId}`)
-        const retrievedSimilar = await response.json()
-        console.log(retrievedSimilar.message)
-        setSimilar(retrievedSimilar.message)
-    }, [])
-
-    const fetchCatalog = useCallback(async () => {
-        const response = await fetch("http://localhost:8000/catalog")
-        const retrievedCatalog = await response.json()
-        setCatalog(retrievedCatalog.message);
         setDataIsReturned(true)
-      }, [])
+        }, [])
         
     useEffect(() => {
         fetchData()
-            .catch(console.error);
-        fetchSimilar()
-            .catch(console.error);
-        fetchCatalog()
             .catch(console.error);
     }, [])
 
@@ -191,17 +138,19 @@ const DatasetPage = () => {
                                     <div>
                                         <h4> {dataset.columns[clickedColumn].name} </h4>
                                         <List component="nav" aria-label="mailbox folders">
-                                            {dataset.columns[clickedColumn].similar.map((similarDataset, index) => (
-                                                <ListItemButton key={index}>
-                                                    <ListItemIcon>
-                                                        <JoinLeftIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={`${similarDataset.datasetId} - ${similarDataset.name}`} 
-                                                        secondary={`Value: ${similarDataset.value}`}
-                                                    />
-                                                </ListItemButton>
+                                            {
+                                                dataset.columns[clickedColumn]['similar'].map((similarDataset, index) => (
+                                                    <ListItemButton key={index}>
+                                                        <ListItemIcon>
+                                                            <JoinLeftIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={`${similarDataset.datasetId} - ${similarDataset.name}`} 
+                                                            secondary={`Value: ${similarDataset.value}`}
+                                                        />
+                                                    </ListItemButton>
+                                                ))
+                                            }
 
-                                            ))}
                                         </List>
 
                                     </div>
@@ -216,7 +165,24 @@ const DatasetPage = () => {
                         <p> Datasets amb una descripció similar</p>
                         {dataIsReturned ? (
                             <div>
-                                {similar.slice(1, 4).map((similarDatasetId, index) => (
+                                {
+                                    dataset.recomendations.map((recomendedDataset, index) => (
+                                        <div key={index}>
+                                        <Box sx={{ p: 2, border: '1px dashed grey' }}>
+                                            <MediaCard 
+                                                title={recomendedDataset.title} 
+                                                category={recomendedDataset.category} 
+                                                date={recomendedDataset.date} 
+                                                description={recomendedDataset.description} 
+                                                origin={recomendedDataset.origin} 
+                                                web_url={recomendedDataset.web_url} 
+                                                datasetId={index}
+                                            />
+                                        </Box>
+                                    </div>
+                                    ))
+                                }
+                                {/*similar.slice(1, 4).map((similarDatasetId, index) => (
 
                                     <div key={index}>
                                         <Box sx={{ p: 2, border: '1px dashed grey' }}>
@@ -232,7 +198,7 @@ const DatasetPage = () => {
                                         </Box>
                                     </div>
 
-                                ))}
+                                ))*/}
                             </div>
                         ) : (<p>loading</p>)}
                     </Box>

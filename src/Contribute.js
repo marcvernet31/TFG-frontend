@@ -1,13 +1,25 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Icon from '@mui/material/Icon';
+
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
+import SendIcon from '@mui/icons-material/Send';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
 
 import ResponsiveAppBar from './components/ResponsiveAppBar'
 
@@ -20,7 +32,45 @@ const rows = [
  
 ]
 
+const SendMessage = () => {
 
+  return(
+    <Card sx={{ minWidth: 275 }}>
+      <CardContent>
+
+    <Box
+    sx={{
+      marginTop: 8,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    }}
+  >
+    <Icon sx={{ m: 1 }}>
+      <SendIcon />
+    </Icon>
+    <Typography component="h1" variant="h5">
+      Envia
+    </Typography>
+    <Typography component="p" variant="p">
+      Accedeix al formulari per col·laborar
+    </Typography>
+    <Box component="form" noValidate sx={{ mt: 1 }}>
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+      >
+        Col·labora
+      </Button>
+
+    </Box>
+  </Box>
+  </CardContent>
+    </Card>
+  )
+}
 const BasicTable = () => {
     return (
       <TableContainer component={Paper}>
@@ -115,6 +165,11 @@ const Contribute = () => {
                     <Container maxWidth="sm" sx={{p:2,border: '1px dashed grey' }}>
                         <p>descripcio de cada variable</p>
                     </Container>
+                    <Container maxWidth="sm" sx={{p:2,border: '1px dashed grey' }}>
+
+                    <SendMessage/>
+                    </Container>
+
                 </Box>
 
             </main>

@@ -26,6 +26,8 @@ import Footer from './components/Footer';
 import MainFeaturedPost from './components/MainFeaturedPost';
 import ResponsiveAppBar from './components/ResponsiveAppBar'; 
 
+import {userContext} from './userContext';
+
 // Header on main page
 const mainFeaturedPost = [
   {
