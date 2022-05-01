@@ -1,5 +1,5 @@
-import {useEffect, useState, useCallback} from "react";
 import * as React from 'react';
+import {useEffect, useState, useCallback} from "react";
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -20,6 +20,7 @@ import CardContent from '@mui/material/CardContent';
 import SearchIcon from '@mui/icons-material/Search';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
+
 import ResponsiveAppBar from './components/ResponsiveAppBar'; 
 
 
@@ -29,67 +30,66 @@ const origins = ["Barcelona", "L'Hospitalet"]
 
 
 const CustomizedInputBase = ({setSearchBar}) => {
-    return (
-      <Paper
-        component="form"
-        sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-      >
-        <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          placeholder="Cerca al catàleg"
-          inputProps={{ 'aria-label': 'search google maps' }}
-          onChange={(event) => setSearchBar(event.target.value)}
-        />
-        <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
-          <SearchIcon />
-        </IconButton>
-      </Paper>
-    );
-  }
+  return (
+    <Paper
+      component="form"
+      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
+    >
+      <InputBase
+        sx={{ ml: 1, flex: 1 }}
+        placeholder="Cerca al catàleg"
+        inputProps={{ 'aria-label': 'search google maps' }}
+        onChange={(event) => setSearchBar(event.target.value)}
+      />
+      <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+        <SearchIcon />
+      </IconButton>
+    </Paper>
+  );
+}
 
 
 const MediaCard = ({title, category, date, description, origin, web_url, datasetId}) => {
-  
-    return (
-      <Card sx={{ maxWidth: 500 }}>
-        <CardContent>
-          <Typography gutterBottom variant="h6" component="h5">
-            {title}
-          </Typography>
-          <Stack direction="row" spacing={2} >
-            <Chip label={origin} />
-            <Chip label={category} />
-          </Stack>
-          <Container sx={{ p:2, border: '1px dashed grey'}}></Container>
-          {(description.length < 200) ? 
-            (
-              <Typography variant="p" component="p" paragraph color="text.secondary">
-                {description}
-              </Typography>
-            ) 
-            : 
-            (
-              <Typography variant="p" component="p" paragraph color="text.secondary">
-              {description.substr(0,200)}...
-              </Typography>
-            )
-          }
-
-        </CardContent>
-        <CardActions>
-          <Button size="small" href={`/catalog/${datasetId}`}> 
-            Visita 
-          </Button>
-        </CardActions>
-      </Card>
-    );
-  }
+  return (
+    <Card sx={{ maxWidth: 500 }}>
+      <CardContent>
+        <Typography gutterBottom variant="h6" component="h5">
+          {title}
+        </Typography>
+        <Stack direction="row" spacing={2} >
+          <Chip label={origin} />
+          <Chip label={category} />
+        </Stack>
+        <Container sx={{ p:2, /*border: '1px dashed grey'*/}}></Container>
+        {(description.length < 200) ? 
+          (
+            <Typography variant="p" component="p" paragraph color="text.secondary">
+              {description}
+            </Typography>
+          ) 
+          : 
+          (
+            <Typography variant="p" component="p" paragraph color="text.secondary">
+            {description.substr(0,200)}...
+            </Typography>
+          )
+        }
+      </CardContent>
+      <CardActions>
+        <Button size="small" href={`/catalog/${datasetId}`}> 
+          Visita 
+        </Button>
+      </CardActions>
+    </Card>
+  );
+}
 
 
 //  dataset.title.toLowerCase().includes(searchBar)
 
 const CatalogDispaly = ({catalog, searchBar, selectedOrigin}) => {
 
+  // Range of information cards to be displayed
   const [showRange, setShowRange] = useState([0, 10]) 
 
   const handlePaginationChange = (page) => {
@@ -127,7 +127,7 @@ const CatalogDispaly = ({catalog, searchBar, selectedOrigin}) => {
       })
         .slice(showRange[0], showRange[1]).map((dataset, index) =>    
           <div key={index}>  
-            <Box key={index} sx={{ m:2, border: '1px dashed grey' }} >
+            <Box key={index} sx={{ m:2, /*border: '1px dashed grey'*/ }} >
               <MediaCard  
                 title={dataset.title}
                 category={dataset.category}
@@ -140,20 +140,22 @@ const CatalogDispaly = ({catalog, searchBar, selectedOrigin}) => {
             </Box>
           </div>                                   
       )}
-      <Box sx={{ m:2, border: '1px dashed grey' }}     justifyContent="center" alignItems="center">
+      <Box sx={{ m:2, /*border: '1px dashed grey'*/ }}     
+        justifyContent="center" alignItems="center"
+      >
         <Pagination 
           count={filteredLength()} 
           color="primary" 
           onClick={event => handlePaginationChange(event.target.textContent)}
         />
       </Box>
-
     </div>
   )
 }
 
 const MultipleSelect = ({names, selectedValue, setSelectedValue, inputLabel}) => {
 
+  // que passa ??
   const handleChange = (event) => {
     const {
       target: { value },
@@ -167,7 +169,9 @@ const MultipleSelect = ({names, selectedValue, setSelectedValue, inputLabel}) =>
   return (
     <div>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-name-label"> {inputLabel} </InputLabel>
+        <InputLabel id="demo-multiple-name-label"> 
+          {inputLabel} 
+        </InputLabel>
         <Select
           labelId="demo-multiple-name-label"
           id="demo-multiple-name"
@@ -211,20 +215,23 @@ const Selection = ({selectedOrigin, setSelectedOrigin, selectedCategories, setSe
         selectedValue={selectedCategories} 
         setSelectedValue={setSelectedCategories}
         inputLabel='Categoria'
-
       />
-
     </div>
-
   )
 }
 
+
 const DatasetSearch = () => {
 
+  // Full catalog fetched from api
   const [catalog, setCatalog] = useState([])  
+  // Control state to avoid empty rendering
   const [loading, setLoading] = useState(false)
+  // Text input on the search bar
   const [searchBar, setSearchBar] = useState("")
+  // Selected variable on the origin selector
   const [selectedOrigin, setSelectedOrigin] = useState([]);
+  // Selected variable on the category selector
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   
@@ -241,46 +248,44 @@ const DatasetSearch = () => {
       .catch(console.error);
   }, [])
 
-    return(
-        <>
-            <ResponsiveAppBar/>
-            <Container maxWidth={"lg"} sx={{ p: 2, border: '1px dashed grey' }}>
-                <main>
-                  <Typography
-                    component="h1"
-                    variant="h2"
-                    align="center"
-                    color="text.primary"
-                    gutterBottom
-                  >
-                    Catàleg
-                  </Typography>
-                    
-                    <Box display="flex" justifyContent="center" sx={{ p: 2, border: '1px dashed grey' }}>
-                        <CustomizedInputBase setSearchBar={setSearchBar}/>
-                    </Box>
-
-                    <Card display="flex"  sx={{ p: 2, border: '1px dashed grey' }}>
-                      <Selection 
-                        selectedOrigin={selectedOrigin}
-                        setSelectedOrigin={setSelectedOrigin}
-                        selectedCategories={selectedCategories}
-                        setSelectedCategories={setSelectedCategories}
-                      />
-                    </Card>
-
-                    {loading ? 
-                      (<p>loading</p>) 
-                      : 
-                      (
-                        <Box display="flex" justifyContent="center" sx={{ p: 2, border: '1px dashed grey' }}>
-                          <CatalogDispaly catalog={catalog} searchBar={searchBar} selectedOrigin={selectedOrigin}/>
-                        </Box>
-                    )}
-                </main>
-            </Container>
-        </>
-    )
+  return(
+    <>
+      <ResponsiveAppBar/>
+      <Container maxWidth={"lg"} sx={{ p: 2, /*border: '1px dashed grey' */}}>
+        <main>
+          <Typography
+            component="h1"
+            variant="h2"
+            align="center"
+            color="text.primary"
+            gutterBottom
+          >
+            Catàleg
+          </Typography>
+          <Box display="flex" justifyContent="center" sx={{ p: 2, /* border: '1px dashed grey'*/ }}>
+            <CustomizedInputBase setSearchBar={setSearchBar}/>
+          </Box>
+          <Card display="flex"  sx={{ p: 2, /*border: '1px dashed grey' */}}>
+            <Selection 
+              selectedOrigin={selectedOrigin}
+              setSelectedOrigin={setSelectedOrigin}
+              selectedCategories={selectedCategories}
+              setSelectedCategories={setSelectedCategories}
+            />
+          </Card>
+          {loading ? 
+            (<p>loading</p>) 
+            : 
+            (
+              <Box display="flex" justifyContent="center" sx={{ p: 2, /*border: '1px dashed grey' */}}>
+                <CatalogDispaly catalog={catalog} searchBar={searchBar} selectedOrigin={selectedOrigin}/>
+              </Box>
+            )
+          }
+        </main>
+      </Container>
+    </>
+  )
 }
 
 export default DatasetSearch

@@ -1,4 +1,43 @@
 
+DESCRIPTION
+
+    -- App.js => initial page rendered by React, contains routing to all the pages
+    -- MainPage.js => Home, access to catalog
+    -- About.js => explanation of the website and project
+    -- Catalog.js => catalog 
+    -- Contribute.js
+    -- components/MainFeaturedPost.js => Header for Home, used in MainPage.js
+    -- components/ResponsiveAppBar.js
+    -- components/Footer.js
+
+
+MainPage.js 
+    -- FeaturedPost, create content
+    -- origin posts, need to be fetched from api 
+    -- categories, unified and fetched from api
+    -- frases amb logos han de tenir algo a veure
+
+About.js 
+    -- Tot
+
+Catalog.js 
+    -- categories and origins fetched from api
+    -- category and origin selection not working => change filtering logic
+
+Contribute.js 
+    -- checking correct format of table
+    -- adding variable description
+
+components/MainFeaturedPost.js
+    -- Tot
+
+components/ResponsiveAppBar.js
+    -- Title
+    -- choosing which names include in profile
+    -- envia button not working
+components/Footer.js
+    -- Tot
+
 IMPORTANT
  -- Join interafce
  -- join results on individual datasets page

@@ -18,7 +18,6 @@ import ListItemText from '@mui/material/ListItemText';
 import { makeStyles } from "@material-ui/core/styles";
 import ListSubheader from '@mui/material/ListSubheader';
 import ListItemButton from '@mui/material/ListItemButton';
-import CardActionArea from '@mui/material/CardActionArea';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import EnergySavingsLeafIcon from '@mui/icons-material/EnergySavingsLeaf';
 
@@ -26,7 +25,6 @@ import Footer from './components/Footer';
 import MainFeaturedPost from './components/MainFeaturedPost';
 import ResponsiveAppBar from './components/ResponsiveAppBar'; 
 
-import {userContext} from './userContext';
 
 // Header on main page
 const mainFeaturedPost = [
@@ -75,8 +73,7 @@ const originDatasets = [
       "Datasets de l'ajuntament de L'Hospitalet",
     image: 'hosp.jpg',
     imageLabel: 'Image Text',
-  },
-
+  }
 ];
 
 // Information about dataset information
@@ -129,6 +126,8 @@ const cards = [
   description: 'Oferiu una administració més transparent a ciutadans i empreses'
 }
 ]
+
+
 
 const InformationCard = ({card, icon}) => {
   const useStyles = makeStyles({
@@ -211,59 +210,44 @@ const CatalogCard = () => {
 
   return(
     <Card className={classes.custom}> 
-    <Container sx={{ m:3, border: '1px dashed grey' }}>
-      <Stack spacing={4}>
-        <Stack spacing={0}>
-        <Typography variant="h4" component="h5" align="center">
-          Catàleg de datasets
-        </Typography>
-        <Typography variant="body1" align="center">
-          Explora el cataleg complet de datasets disponibles
-        </Typography>
+      <Container sx={{ m:3, /*border: '1px dashed grey' */}}>
+        <Stack spacing={4}>
+          <Stack spacing={0}>
+            <Typography variant="h4" component="h5" align="center">
+              Catàleg de datasets
+            </Typography>
+            <Typography variant="body1" align="center">
+              Explora el cataleg complet de datasets disponibles
+            </Typography>
+          </Stack>
+          <Box display="flex" justifyContent="center">
+            <Button href="/catalog" variant="contained"> 
+              Explora   
+            </Button>
+          </Box>
         </Stack>
-
-        <Box display="flex" justifyContent="center">
-          <Button href="/catalog" variant="contained"> Explora </Button>
-        </Box>
-      </Stack>
-    </Container>
-  </Card>
+      </Container>
+    </Card>
   )
 }
 
-// Card for categories (to be changed)
-const CategoryCard = ({category}) => {
-  return(
-    <Grid item xs={10} md={3} sm={3}>
-      <CardActionArea component="a" href="#">
-        <Card sx={{ display: 'flex' }}>
-          <CardContent sx={{ flex: 1 }}>
-            <Typography component="h2" variant="h5">
-              {category.name}
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-              {category.amount}
-            </Typography>
-            <Button variant="contained"> Explora </Button>
-          </CardContent>
-        </Card>
-      </CardActionArea>
-    </Grid>
-  )
-} 
-
 
 const MainPage = () => {
+  // Index for Fetaured Post
   const [mainPageIndex, setMainPageIndex] = useState(0)
   return (
     <>
       <ResponsiveAppBar/>
-      <Container maxWidth={"lg"} sx={{ p: 2, border: '1px dashed grey' }}>
+      <Container maxWidth={"lg"} sx={{ p: 2, /*border: '1px dashed grey' */}}>
         <main>
           <Box sx={{ boxShadow: 8 }}>
-            <MainFeaturedPost post={mainFeaturedPost[mainPageIndex]} mainPageIndex={mainPageIndex} setMainPageIndex={setMainPageIndex} maxIndex={mainFeaturedPost.length-1} />
+            <MainFeaturedPost 
+              post={mainFeaturedPost[mainPageIndex]} 
+              mainPageIndex={mainPageIndex} 
+              setMainPageIndex={setMainPageIndex} 
+              maxIndex={mainFeaturedPost.length-1} 
+            />
           </Box>
-
           <Container sx={{ p: 2}} maxWidth="md">
             <Grid container spacing={4}>
               <InformationCard card={cards[0]} icon={<EnergySavingsLeafIcon fontSize='large'/>}/>
@@ -271,13 +255,12 @@ const MainPage = () => {
               <InformationCard card={cards[2]} icon={<SearchIcon fontSize='large'/>}/>
             </Grid>
           </Container>
-          
-          <Container sx={{ p: 3, border: '1px dashed grey' }}>
+          <Container sx={{ p: 3, /*border: '1px dashed grey' */}}>
             <CatalogCard/>
           </Container>
                   
-          <Container sx={{ p: 10, border: '1px dashed grey' }}>
-            <Container sx={{ p: 3, border: '1px dashed grey' }}>
+          <Container sx={{ p: 10, /*border: '1px dashed grey' */}}>
+            <Container sx={{ p: 3, /*border: '1px dashed grey' */}}>
               <Typography variant="h5" align="center" sx={{ fontWeight: 'bold' }}>
                 Datasets per origen
               </Typography>
@@ -288,10 +271,9 @@ const MainPage = () => {
               ))}
             </Grid>
           </Container>
-
-          <Container sx={{ p: 3, border: '1px dashed grey' }}>
+          <Container sx={{ p: 3, /*border: '1px dashed grey' */}}>
           </Container>
-          <Container sx={{ p: 3, border: '1px dashed grey' }}>
+          <Container sx={{ p: 3, /*border: '1px dashed grey' */}}>
             <Typography variant="h5" align="center">
               Datasets per categoria
             </Typography>
@@ -307,16 +289,14 @@ const MainPage = () => {
             }
           >
             {categoryDatasets.map((category) => (
-                    <ListItemButton>
-                    <ListItemIcon>
-                      <SendIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={category.name} />
-                  </ListItemButton>
-            
+              <ListItemButton>
+                <ListItemIcon>
+                  <SendIcon />
+                </ListItemIcon>
+                <ListItemText primary={category.name} />
+              </ListItemButton>
             ))}
           </List>
-
         </main>
       </Container>
       <Footer
