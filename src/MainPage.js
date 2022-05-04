@@ -1,6 +1,6 @@
 import * as React from 'react';
+import {useEffect, useState, useCallback} from "react";
 
-import {useState} from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -53,64 +53,6 @@ const mainFeaturedPost = [
     linkText: 'Continue reading…',
   }
 ]
-
-// Information for cards about dataset origins (Barcelona, Hospitalet, ...)
-const originDatasets = [
-  {
-    title: 'OpenData Barcelona',
-    sourceId: 'barcelona',
-    amount: '558',
-    description:
-      "Datasets de l'ajuntament de Barcelona",
-    image: 'barcelona.jpg',
-    imageLabel: 'Image Text',
-  },
-  {
-    title: "Open Data L'Hospitalet",
-    sourceId: 'hospitalet',
-    amount: '98',
-    description:
-      "Datasets de l'ajuntament de L'Hospitalet",
-    image: 'hosp.jpg',
-    imageLabel: 'Image Text',
-  }
-];
-
-// Information about dataset information
-const categoryDatasets = [
-  {
-    name: 'Territori',
-    amount: "86",
-    icon: ''
-  },
-  {
-    name: 'Població',
-    amount: "103",
-    icon: ''
-  },
-  {
-    name: 'Ciutat i Serveis',
-    amount: "24",
-    icon: ''
-  },
-  {
-    name: 'Societat',
-    amount: "86",
-    icon: ''
-  },
-  {
-    name: 'Administració',
-    amount: "134",
-    icon: ''
-  },
-  {
-    name: 'Economia i Empresa',
-    amount: "102",
-    icon: ''
-  },
-]
-
-
 
 const cards = [
 {
@@ -171,6 +113,15 @@ function OriginCard({post}) {
   });
   const classes = useStyles();
 
+  const selectImage = () => {
+    if(post.image){
+      return(post.image)
+    }
+    else{
+      return('gradient.jpg')
+    }
+  }
+
   return (
     <Grid item xs={12} md={6}>
         <Card sx={{ display: 'flex' }} className={classes.custom}>
@@ -191,7 +142,7 @@ function OriginCard({post}) {
           <CardMedia
             component="img"
             sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-            image={post.image}
+            image={selectImage()}
             alt={post.imageLabel}
           />
         </Card>
@@ -235,6 +186,26 @@ const CatalogCard = () => {
 const MainPage = () => {
   // Index for Fetaured Post
   const [mainPageIndex, setMainPageIndex] = useState(0)
+  // Control state to avoid empty rendering
+  const [loading, setLoading] = useState(false)
+  // Initialized with empty element to avoid undefined error
+  const [frontendData, setFrontendData] = useState({'origin': [], 'category': []})
+
+  // Fetch data used for frontend
+  const fetchData = useCallback(async () => {
+    setLoading(true)
+    const response = await fetch("http://localhost:8000/frontend/MainPage")
+    const retrievedData = await response.json()
+    setFrontendData(retrievedData.message);
+    console.log(retrievedData.message)
+    setLoading(false)
+  }, [])
+  
+  useEffect(() => {
+    fetchData()
+      .catch(console.error);
+  }, [])
+
   return (
     <>
       <ResponsiveAppBar/>
@@ -265,38 +236,47 @@ const MainPage = () => {
                 Datasets per origen
               </Typography>
             </Container>
-            <Grid container spacing={4}>
-              {originDatasets.map((post) => (
-                <OriginCard key={post.title} post={post} />
-              ))}
-            </Grid>
+            {loading ? (
+              <div>loading</div>
+            ):(
+              <Grid container spacing={4}>
+                {frontendData.origin.map((post) => (
+                  <OriginCard key={post.title} post={post} />
+                ))}
+              </Grid>
+            )}
+
           </Container>
           <Container sx={{ p: 3, /*border: '1px dashed grey' */}}>
           </Container>
           <Container sx={{ p: 3, /*border: '1px dashed grey' */}}>
-            <Typography variant="h5" align="center">
+            <Typography variant="h5" align="center" sx={{ fontWeight: 'bold' }}>
               Datasets per categoria
             </Typography>
           </Container>
-          <List
-            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-            subheader={
-              <ListSubheader component="div" id="nested-list-subheader">
-                Categories
-              </ListSubheader>
-            }
-          >
-            {categoryDatasets.map((category) => (
-              <ListItemButton>
-                <ListItemIcon>
-                  <SendIcon />
-                </ListItemIcon>
-                <ListItemText primary={category.name} />
-              </ListItemButton>
-            ))}
-          </List>
+          {loading ? (
+            <div>loading</div>
+          ):(
+            <List
+              sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  Categories
+                </ListSubheader>
+              }
+            >
+              {frontendData.category.map((category) => (
+                <ListItemButton>
+                  <ListItemIcon>
+                    <SendIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={category.name} />
+                </ListItemButton>
+              ))}
+            </List>
+          )}
         </main>
       </Container>
       <Footer

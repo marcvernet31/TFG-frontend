@@ -2,12 +2,11 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Icon from '@mui/material/Icon';
 import Table from '@mui/material/Table';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import TableRow from '@mui/material/TableRow';
+import Accordion from '@mui/material/Accordion';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -16,43 +15,80 @@ import TableHead from '@mui/material/TableHead';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import TableContainer from '@mui/material/TableContainer';
-
-import Accordion from '@mui/material/Accordion';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ResponsiveAppBar from './components/ResponsiveAppBar';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import ResponsiveAppBar from './components/ResponsiveAppBar'
+
 
 // utilities for generating the demo table
-function createData(description, category, organization_name_ca, date_published, fuente, web_url, download_url, status, origin, index) {
-    return { description, category, organization_name_ca, date_published, fuente, web_url, download_url, status, origin, index };
+function createData(title, description, category, date_published, source, web_url, download_url, status, origin) {
+    return { title, description, category, date_published, source, web_url, download_url, status, origin };
   }
 const rows = [
-    createData("Unitats administratives  de la ciutat de Barcelona", "Detall de les unitats administratives  de la ciutat de Barcelona:  districtes, barris, àrea interès, àrees estadístiques bàsiques (AEB) i seccions censals", "Administració",	"Sector públic", "2017-07-06", "Ajuntament de Barcelona", "https://opendata-ajuntament.barcelona.cat/data/ca/dataset?q=&name=20170706-districtes-barris", "https://opendata-ajuntament.barcelona.cat/data/dataset/808daafa-d9ce-48c0-925a-fa5afdb1ed41/resource/4cc59b76-a977-40ac-8748-61217c8ff367/download",	"-", "barcelona", "0"),
+    createData("Unitats administratives  de la ciutat de Barcelona", 
+      "Detall de les unitats administratives  de la ciutat de Barcelona:  districtes, barris, àrea interès, àrees estadístiques bàsiques (AEB) i seccions censals", 
+      "Administració", 
+      "2017-07-06", 
+      "Ajuntament de Barcelona", 
+      "https://opendata-ajuntament.barcelona.cat/data/ca/dataset?q=&name=20170706-districtes-barris", 
+      "https://opendata-ajuntament.barcelona.cat/data/dataset/808daafa-d9ce-48c0-925a-fa5afdb1ed41/resource/4cc59b76-a977-40ac-8748-61217c8ff367/download",	
+      "-", 
+      "barcelona"),
 ]
+
+/*
+'index': 0,
+  'title': 'Unitats administratives  de la ciutat de Barcelona',
+  'description': 'Detall de les unitats administratives  de la ciutat de Barcelona:  districtes, barris, àrea interès, àrees estadístiques bàsiques (AEB) i seccions censals  ',
+  'category': 'Administració',
+  'date_published': '2017-07-06',
+  'source': 'Ajuntament de Barcelona',
+  'web_url': 'https://opendata-ajuntament.barcelona.cat/data/ca/dataset?q=&name=20170706-districtes-barris',
+  'download_url': 'https://opendata-ajuntament.barcelona.cat/data/dataset/808daafa-d9ce-48c0-925a-fa5afdb1ed41/resource/4cc59b76-a977-40ac-8748-61217c8ff367/download',
+  'status': '-',
+  'origin': 'Barcelona'
+
+*/
 
 // Descriptions for each column
 const ColumnDescriptions = [
   {
+    'name': 'title',
+    'value': 'Title of the dataset'
+  },
+  {
     'name': 'description',
-    'value': ' Lists are a continuous group of text or images. They are composed of items containing primary and supplemental actions, which are represented by icons and text. '
+    'value': 'Text describing the dataset content'
   },
   {
     'name': 'category',
-    'value': ' Lists are a continuous group of text or images. They are composed of items containing primary and supplemental actions, which are represented by icons and text. '
-  },
-  {
-    'name': 'organization_name_ca',
-    'value': ' Lists are a continuous group of text or images. They are composed of items containing primary and supplemental actions, which are represented by icons and text. '
+    'value': 'Category in which the dataset pertains inside the original dataset collection'
   },
   {
     'name': 'date_published',
-    'value': ' Lists are a continuous group of text or images. They are composed of items containing primary and supplemental actions, which are represented by icons and text. '
+    'value': 'Publishing date of the dataset. Can be empty'
+  },
+  {
+    'name': 'source',
+    'value': 'Creator of the dataset'
   },
   {
     'name': 'web_url',
-    'value': ' Lists are a continuous group of text or images. They are composed of items containing primary and supplemental actions, which are represented by icons and text. '
+    'value': 'URL that redirects to the website where the original dataset is hosted.'
+  },
+  {
+    'name': 'download_url',
+    'value': 'URL to download file. Important to be able to identify similar columns'
+  },
+  {
+    'name': 'status',
+    'value': 'Identify the http status of the download url. Optional variable'
+  },
+  {
+    'name': 'origin',
+    'value': 'Dataset collection identifier'
   },
 ]
 
@@ -135,17 +171,17 @@ const BasicTable = () => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell> title </TableCell>
+            <TableCell ></TableCell>
+
+              <TableCell align="right">title</TableCell>
               <TableCell align="right">description</TableCell>
               <TableCell align="right">category</TableCell>
-              <TableCell align="right">organization_name_ca</TableCell>
               <TableCell align="right">date_published</TableCell>
-              <TableCell align="right">fuente</TableCell>
+              <TableCell align="right">source</TableCell>
               <TableCell align="right">web_url</TableCell>
               <TableCell align="right">download_url</TableCell>
               <TableCell align="right">status</TableCell>
               <TableCell align="right">origin</TableCell>
-              <TableCell align="right">index</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -157,16 +193,15 @@ const BasicTable = () => {
                 <TableCell component="th" scope="row">
                   {row.name}
                 </TableCell>
+                <TableCell align="right">title</TableCell>
                 <TableCell align="right">{row.description}</TableCell>
                 <TableCell align="right">{row.category}</TableCell>
-                <TableCell align="right">{row.organization_name_ca}</TableCell>
                 <TableCell align="right">{row.date_published}</TableCell>
-                <TableCell align="right">{row.fuente}</TableCell>
+                <TableCell align="right">{row.source}</TableCell>
                 <TableCell align="right">{row.web_url}</TableCell>
                 <TableCell align="right">{row.download_url}</TableCell>
                 <TableCell align="right">{row.status}</TableCell>
                 <TableCell align="right">{row.origin}</TableCell>
-                <TableCell align="right">{row.index}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -221,7 +256,15 @@ const Contribute = () => {
           <Container maxWidth="sm" sx={{p:2,border: '1px dashed grey' }}>
           </Container>
           <Container maxWidth="sm" sx={{p:2,border: '1px dashed grey' }}>
-              <p>descripcio de cada variable</p>
+          <Typography
+              component="h1"
+              variant="h5"
+              align="center"
+              color="text.primary"
+              gutterBottom
+            >
+              Descripció de les variables
+            </Typography>
               <Description />
           </Container>
           <Container maxWidth="sm" sx={{p:2,border: '1px dashed grey' }}>

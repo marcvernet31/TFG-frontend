@@ -32,43 +32,40 @@ Page to show the information about an individual dataset
 const DatasetInformation = ({dataset, image}) => {
     return(
         <Grid item xs={12} md={6}>
-        <Card sx={{ display: 'flex' }} >
-          <CardContent sx={{ flex: 1 }}>
-            <Stack spacing={2}>
-                <Container sx={{p: 2, border: '1px dashed grey' }}>
-                    <Typography gutterBottom variant="h3" component="h5">
-                        {dataset.title}
-                    </Typography>
-                    <Typography variant="p" component="p" color="text.secondary">
-                        {dataset.description}
-                    </Typography>
-                    <Container sx={{p: 1, border: '1px dashed grey' }}>
-                        <Stack direction="row" spacing={2}>
-                            <Chip label="category?" />
-                            <Chip label="date?" />
-                            <Chip label="filetype?" />
-                        </Stack>
-                    </Container>
-                </Container>
-
-                <Container sx={{p: 2, border: '1px dashed grey' }}>
-                    <Stack direction="row" spacing={2}>
-                        <Button variant="contained"> Descarrega </Button>
-                        <Button variant="contained"> Visita l'original </Button>
+            <Card sx={{ display: 'flex' }} >
+                <CardContent sx={{ flex: 1 }}>
+                    <Stack spacing={2}>
+                        <Container sx={{p: 2, border: '1px dashed grey' }}>
+                            <Typography gutterBottom variant="h3" component="h5">
+                                {dataset.title}
+                            </Typography>
+                            <Typography variant="p" component="p" color="text.secondary">
+                                {dataset.description}
+                            </Typography>
+                            <Container sx={{p: 1, border: '1px dashed grey' }}>
+                                <Stack direction="row" spacing={2}>
+                                    <Chip label="category?" />
+                                    <Chip label="date?" />
+                                    <Chip label="filetype?" />
+                                </Stack>
+                            </Container>
+                        </Container>
+                        <Container sx={{p: 2, border: '1px dashed grey' }}>
+                            <Stack direction="row" spacing={2}>
+                                <Button variant="contained"> Descarrega </Button>
+                                <Button variant="contained"> Visita l'original </Button>
+                            </Stack>
+                        </Container>
                     </Stack>
-                </Container>
-            </Stack>
-          </CardContent>
-        </Card>
-    </Grid>     
-               
+                </CardContent>
+            </Card>
+        </Grid>              
     )
 }
 
 
 // Structure for recomended datasets
 const MediaCard = ({title, category, date, description, origin, web_url, datasetId}) => {
-  
     return (
       <Card sx={{ maxWidth: 500 }}>
         <CardContent>
@@ -116,7 +113,7 @@ const DatasetPage = () => {
                 <main>
                     <DatasetInformation dataset={dataset} image='gradient.jpg'/>
                     <Box sx={{ p: 2, border: '1px dashed grey' }}>
-                        <Typography variant="h5" color="inherit" paragraph>
+                        <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
                             Joins recomenades
                         </Typography>
                         {dataIsReturned ? (
@@ -159,14 +156,14 @@ const DatasetPage = () => {
                         ) : (<p>loading</p>)}
                     </Box>
                     <Box sx={{ p: 2, border: '1px dashed grey' }}>
-                        <Typography variant="h5" color="inherit" paragraph>
+                        <Typography  variant="h5" sx={{ fontWeight: 'bold' }}>
                             Datasets similars
                         </Typography>
                         <p> Datasets amb una descripció similar</p>
                         {dataIsReturned ? (
                             <div>
                                 {
-                                    dataset.recomendations.map((recomendedDataset, index) => (
+                                    dataset.recomendations.slice(1, 5).map((recomendedDataset, index) => (
                                         <div key={index}>
                                         <Box sx={{ p: 2, border: '1px dashed grey' }}>
                                             <MediaCard 
@@ -182,23 +179,6 @@ const DatasetPage = () => {
                                     </div>
                                     ))
                                 }
-                                {/*similar.slice(1, 4).map((similarDatasetId, index) => (
-
-                                    <div key={index}>
-                                        <Box sx={{ p: 2, border: '1px dashed grey' }}>
-                                            <MediaCard 
-                                                title={catalog[similarDatasetId].title} 
-                                                category={catalog[similarDatasetId].category} 
-                                                date={catalog[similarDatasetId].date} 
-                                                description={catalog[similarDatasetId].description} 
-                                                origin={catalog[similarDatasetId].origin} 
-                                                web_url={catalog[similarDatasetId].web_url} 
-                                                datasetId={index}
-                                            />
-                                        </Box>
-                                    </div>
-
-                                ))*/}
                             </div>
                         ) : (<p>loading</p>)}
                     </Box>

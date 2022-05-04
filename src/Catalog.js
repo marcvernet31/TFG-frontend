@@ -25,8 +25,8 @@ import ResponsiveAppBar from './components/ResponsiveAppBar';
 
 
 
-const categories = ["Sector públic", "Salut", "Urbanisme i infraestructures", "Medi ambient", "Cultura i oci", "Transport", "Economia", "Hisenda", "Administració", "Territori", "Altres"]
-const origins = ["Barcelona", "L'Hospitalet"]
+//const categories = ["Sector públic", "Salut", "Urbanisme i infraestructures", "Medi ambient", "Cultura i oci", "Transport", "Economia", "Hisenda", "Administració", "Territori", "Altres"]
+//const origins = ["Barcelona", "L'Hospitalet"]
 
 
 const CustomizedInputBase = ({setSearchBar}) => {
@@ -194,7 +194,7 @@ const MultipleSelect = ({names, selectedValue, setSelectedValue, inputLabel}) =>
   );
 }
 
-const Selection = ({selectedOrigin, setSelectedOrigin, selectedCategories, setSelectedCategories}) => {
+const Selection = ({categories, origins, selectedOrigin, setSelectedOrigin, selectedCategories, setSelectedCategories}) => {
 
   return(
     <div>
@@ -233,13 +233,21 @@ const DatasetSearch = () => {
   const [selectedOrigin, setSelectedOrigin] = useState([]);
   // Selected variable on the category selector
   const [selectedCategories, setSelectedCategories] = useState([]);
+  //
+  const [frontendData, setFrontendData] = useState({'origins': [], 'categories': []})
 
   
   const fetchData = useCallback(async () => {
     setLoading(true)
-    const response = await fetch("http://localhost:8000/catalog")
-    const retrievedCatalog = await response.json()
+
+    const responseCatalog = await fetch("http://localhost:8000/catalog")
+    const retrievedCatalog = await responseCatalog.json()
     setCatalog(retrievedCatalog.message);
+    const responseFrontend = await fetch("http://localhost:8000/frontend/Catalog")
+    const retrievedData = await responseFrontend.json()
+    setFrontendData(retrievedData.message);
+    console.log(retrievedData.message)
+
     setLoading(false)
   }, [])
   
@@ -267,6 +275,8 @@ const DatasetSearch = () => {
           </Box>
           <Card display="flex"  sx={{ p: 2, /*border: '1px dashed grey' */}}>
             <Selection 
+              categories={frontendData.categories}
+              origins={frontendData.origins}
               selectedOrigin={selectedOrigin}
               setSelectedOrigin={setSelectedOrigin}
               selectedCategories={selectedCategories}

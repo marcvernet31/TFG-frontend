@@ -6,6 +6,8 @@ DESCRIPTION
     -- About.js => explanation of the website and project
     -- Catalog.js => catalog 
     -- Contribute.js
+    -- DataSources.js => information about the ooen data platforms
+    -- DatasetPage.js => page to show information from a individual dataset.
     -- components/MainFeaturedPost.js => Header for Home, used in MainPage.js
     -- components/ResponsiveAppBar.js
     -- components/Footer.js
@@ -13,43 +15,24 @@ DESCRIPTION
 
 MainPage.js 
     -- FeaturedPost, create content
-    -- origin posts, need to be fetched from api 
-    -- categories, unified and fetched from api
+    -- categories
     -- frases amb logos han de tenir algo a veure
-
 About.js 
     -- Tot
-
 Catalog.js 
-    -- categories and origins fetched from api
     -- category and origin selection not working => change filtering logic
-
 Contribute.js 
-    -- checking correct format of table
-    -- adding variable description
-
+    -- envia button not working
+    -- google questionari
+DataSources.js 
+    -- write information
+DatasetPage.js
+    -- chips and button links
+    -- com mostrar joins i datasets similares
 components/MainFeaturedPost.js
     -- Tot
-
 components/ResponsiveAppBar.js
     -- Title
     -- choosing which names include in profile
-    -- envia button not working
 components/Footer.js
     -- Tot
-
-IMPORTANT
- -- Join interafce
- -- join results on individual datasets page
- -- filter by category
- -- filter by publish date
- -- admin interface, hability to add new data
-
-DETAILS
-    -- front page header
-    -- logo
-
-NOT IMPORTANT
-    -- user profiles
-    -- hability to like datasets
-    -- coment on datasets
