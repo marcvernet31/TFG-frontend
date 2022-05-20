@@ -23,7 +23,13 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 
 import ResponsiveAppBar from './components/ResponsiveAppBar'; 
 
-
+/*
+Origins from csv
+0: "Generalitat de Catalunya"
+1: "Barcelona"
+2: "generalitatCatalunya"
+3: "L'Hospitalet"
+*/
 
 //const categories = ["Sector públic", "Salut", "Urbanisme i infraestructures", "Medi ambient", "Cultura i oci", "Transport", "Economia", "Hisenda", "Administració", "Territori", "Altres"]
 //const origins = ["Barcelona", "L'Hospitalet"]
@@ -87,7 +93,7 @@ const MediaCard = ({title, category, date, description, origin, web_url, dataset
 
 //  dataset.title.toLowerCase().includes(searchBar)
 
-const CatalogDispaly = ({catalog, searchBar, selectedOrigin}) => {
+const CatalogDisplay = ({catalog, searchBar, selectedOrigin, selectedCategories}) => {
 
   // Range of information cards to be displayed
   const [showRange, setShowRange] = useState([0, 10]) 
@@ -96,26 +102,36 @@ const CatalogDispaly = ({catalog, searchBar, selectedOrigin}) => {
     setShowRange([page*10, page*10+10])
   }
 
-  const filterLogic = (title, description, origin) => {
+  const filterLogic = (title, description, origin, category) => {
     const searchBarCondition =  (title.toLowerCase().includes(searchBar)
       || description.toLowerCase().includes(searchBar))
+    
+    // origin condition for multiple selection
+    const originCondition = selectedOrigin.includes(origin) || selectedOrigin.length == 0
 
-    const originCondition =   (selectedOrigin.includes('Barcelona') && origin == 'barcelona')
-    || (selectedOrigin.includes('L\'Hospitalet') && origin == 'hospitalet')
-
+    // origin condition for multiple selection
+    const categoryCondition = selectedCategories.includes(category) || selectedCategories.length == 0
+    
+    //const originCondition =   (selectedOrigin.includes('Barcelona') && origin == 'barcelona')
+    //|| (selectedOrigin.includes('L\'Hospitalet') && origin == 'hospitalet')
+    return(
+      searchBarCondition && originCondition && categoryCondition
+    )
+    /*
     if(selectedOrigin.length == 0){
       return searchBarCondition
     } 
     else{
       return(
-        searchBarCondition && originCondition
+        searchBarCondition && originCondition // && categoryCondition
       )
     }
+    */
   }
 
   const filteredLength = () => {
     const len = Math.floor(catalog.filter(function(dataset){
-      return filterLogic(dataset.title, dataset.description, dataset.origin)
+      return filterLogic(dataset.title, dataset.description, dataset.origin, dataset.category)
     }).length / 10)
     return len
   }
@@ -123,7 +139,7 @@ const CatalogDispaly = ({catalog, searchBar, selectedOrigin}) => {
   return(
     <div>
       {catalog.filter(function(dataset){
-        return filterLogic(dataset.title, dataset.description, dataset.origin)
+        return filterLogic(dataset.title, dataset.description, dataset.origin, dataset.category)
       })
         .slice(showRange[0], showRange[1]).map((dataset, index) =>    
           <div key={index}>  
@@ -288,7 +304,14 @@ const DatasetSearch = () => {
             : 
             (
               <Box display="flex" justifyContent="center" sx={{ p: 2, /*border: '1px dashed grey' */}}>
-                <CatalogDispaly catalog={catalog} searchBar={searchBar} selectedOrigin={selectedOrigin}/>
+                <CatalogDisplay 
+                  catalog={catalog} 
+                  searchBar={searchBar} 
+                  selectedOrigin={selectedOrigin}
+                  selectedCategories={selectedCategories} 
+ 
+                  CatalogDisplay={CatalogDisplay}
+                />
               </Box>
             )
           }

@@ -153,6 +153,8 @@ const SendMessage = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              href="https://docs.google.com/forms/d/e/1FAIpQLSegiDfv8yPIqVqhu56vZHQ4_KTGBTMgFjMll5EdOaTECEsr5g/viewform?usp=sf_link"
+              target="_blank"
             >
               Col·labora
             </Button>
@@ -239,9 +241,9 @@ const Contribute = () => {
                 nous datasets.
             </Typography>
           </Container>
-          <Container maxWidth="sm" sx={{p:2,border: '1px dashed grey' }}>
+          <Container maxWidth="sm" sx={{p:2, /*border: '1px dashed grey' */}}>
           </Container>
-          <Container maxWidth="sm" sx={{p:2,border: '1px dashed grey' }}>
+          <Container maxWidth="sm" sx={{p:2, /*border: '1px dashed grey' */}}>
             <Typography
               component="h1"
               variant="h5"
@@ -253,9 +255,9 @@ const Contribute = () => {
             </Typography>
             <BasicTable/>
           </Container>
-          <Container maxWidth="sm" sx={{p:2,border: '1px dashed grey' }}>
+          <Container maxWidth="sm" sx={{p:2, /*border: '1px dashed grey'*/ }}>
           </Container>
-          <Container maxWidth="sm" sx={{p:2,border: '1px dashed grey' }}>
+          <Container maxWidth="sm" sx={{p:2, /*border: '1px dashed grey' */}}>
           <Typography
               component="h1"
               variant="h5"
@@ -267,7 +269,7 @@ const Contribute = () => {
             </Typography>
               <Description />
           </Container>
-          <Container maxWidth="sm" sx={{p:2,border: '1px dashed grey' }}>
+          <Container maxWidth="sm" sx={{p:2, /*border: '1px dashed grey'*/ }}>
             <SendMessage/>
           </Container>
         </Box>

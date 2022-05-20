@@ -22,10 +22,10 @@ import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import EnergySavingsLeafIcon from '@mui/icons-material/EnergySavingsLeaf';
 
 import Footer from './components/Footer';
-import MainFeaturedPost from './components/MainFeaturedPost';
+//import MainFeaturedPost from './components/MainFeaturedPost';
 import ResponsiveAppBar from './components/ResponsiveAppBar'; 
 
-
+/*
 // Header on main page
 const mainFeaturedPost = [
   {
@@ -53,6 +53,7 @@ const mainFeaturedPost = [
     linkText: 'Continue reading…',
   }
 ]
+*/
 
 const cards = [
 {
@@ -212,12 +213,12 @@ const MainPage = () => {
       <Container maxWidth={"lg"} sx={{ p: 2, /*border: '1px dashed grey' */}}>
         <main>
           <Box sx={{ boxShadow: 8 }}>
-            <MainFeaturedPost 
+            {/* <MainFeaturedPost 
               post={mainFeaturedPost[mainPageIndex]} 
               mainPageIndex={mainPageIndex} 
               setMainPageIndex={setMainPageIndex} 
               maxIndex={mainFeaturedPost.length-1} 
-            />
+            /> */}
           </Box>
           <Container sx={{ p: 2}} maxWidth="md">
             <Grid container spacing={4}>
@@ -272,7 +273,7 @@ const MainPage = () => {
                   <ListItemIcon>
                     <SendIcon />
                   </ListItemIcon>
-                  <ListItemText primary={category.name} />
+                  <ListItemText primary={category.name} secondary={category.amount} />
                 </ListItemButton>
               ))}
             </List>
@@ -280,8 +281,8 @@ const MainPage = () => {
         </main>
       </Container>
       <Footer
-        title="Footer"
-        description="Something here to give the footer a purpose!"
+        title="Marc Vernet"
+        description="TFG - UPC 2022"
       />
     </>
   );

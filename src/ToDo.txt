@@ -14,25 +14,12 @@ DESCRIPTION
 
 
 MainPage.js 
-    -- FeaturedPost, create content
-    -- categories
-    -- frases amb logos han de tenir algo a veure
 About.js 
     -- Tot
 Catalog.js 
-    -- category and origin selection not working => change filtering logic
 Contribute.js 
-    -- envia button not working
-    -- google questionari
 DataSources.js 
-    -- write information
 DatasetPage.js
-    -- chips and button links
-    -- com mostrar joins i datasets similares
-components/MainFeaturedPost.js
-    -- Tot
+    -- datasets similars a partir de columnes
 components/ResponsiveAppBar.js
-    -- Title
-    -- choosing which names include in profile
 components/Footer.js
-    -- Tot
